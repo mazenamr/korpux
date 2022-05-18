@@ -17,12 +17,12 @@ public class EntryManager {
     private static final RocksDBManager entryDBManager = new RocksDBManager(Constants.ENTRY_DB_NAME);
     private static final RocksDBManager countDBManager = new RocksDBManager(Constants.COUNT_DB_NAME);
 
-    public static void add(final String key, final Entry value) {
+    public static void putByKey(final String key, final Entry value) {
         try {
             mutex.lock();
             ObjectOutputStream out = null;
             try {
-                Boolean found = get(key) != null;
+                Boolean found = getByKey(key) != null;
                 ByteArrayOutputStream b = new ByteArrayOutputStream();
                 out = new ObjectOutputStream(b);
                 out.writeObject(value);
@@ -48,7 +48,7 @@ public class EntryManager {
         }
     }
 
-    public static Entry get(final String key) {
+    public static Entry getByKey(final String key) {
         try {
             mutex.lock();
             ObjectInputStream in = null;
@@ -76,7 +76,35 @@ public class EntryManager {
         }
     }
 
-    public static List<Entry> getRange(final String prefix) {
+    public static void deleteByKey(final String key) {
+        try {
+            mutex.lock();
+            Entry e = getByKey(key);
+            if (e != null) {
+                String url = e.URL;
+                int count = byteToInt(countDBManager.get(url.getBytes()));
+                if (count > 1) {
+                    countDBManager.put(url.getBytes(), intToByte(count - 1));
+                } else {
+                    countDBManager.delete(url.getBytes());
+                }
+                entryDBManager.delete(key.getBytes());
+            }
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public static void addByWord(final String word, final Entry entry) {
+        try {
+            mutex.lock();
+            putByKey(word + "-" + entry.URL, entry);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public static List<Entry> getByWord(final String prefix) {
         try {
             mutex.lock();
             ObjectInputStream in = null;
@@ -119,26 +147,7 @@ public class EntryManager {
         }
     }
 
-    public static void remove(final String key) {
-        try {
-            mutex.lock();
-            Entry e = get(key);
-            if (e != null) {
-                String url = e.URL;
-                int count = byteToInt(countDBManager.get(url.getBytes()));
-                if (count > 1) {
-                    countDBManager.put(url.getBytes(), intToByte(count - 1));
-                } else {
-                    countDBManager.delete(url.getBytes());
-                }
-                entryDBManager.delete(key.getBytes());
-            }
-        } finally {
-            mutex.unlock();
-        }
-    }
-
-    public static int getCount(final String url) {
+    public static int getURLCount(final String url) {
         try {
             mutex.lock();
             return byteToInt(countDBManager.get(url.getBytes()));
@@ -147,7 +156,7 @@ public class EntryManager {
         }
     }
 
-    public static void resetCount(final String url) {
+    public static void resetURLCount(final String url) {
         try {
             mutex.lock();
             countDBManager.put(url.getBytes(), intToByte(0));

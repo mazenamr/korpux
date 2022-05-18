@@ -19,18 +19,18 @@ public class TestEntryManager {
         Entry twitter_1 = new Entry("https://www.twitter.com", 0, 0, 0, 0, 0, 0, 0, 0);
         Entry twitter_2 = new Entry("https://www.twitter.com", 1, 1, 1, 1, 1, 1, 1, 1);
 
-        EntryManager.add("google-" + google_1.URL, google_1);
-        EntryManager.add("google-" + google_2.URL, google_2);
-        EntryManager.add("alphabet-" + alphabet.URL, alphabet);
-        EntryManager.add("facebook-" + facebook.URL, facebook);
-        EntryManager.add("twitter-" + twitter_1.URL, twitter_1);
-        EntryManager.add("twitter-" + twitter_2.URL, twitter_2);
+        EntryManager.putByKey("google-" + google_1.URL, google_1);
+        EntryManager.addByWord("google", google_2);
+        EntryManager.putByKey("alphabet-" + alphabet.URL, alphabet);
+        EntryManager.addByWord("facebook", facebook);
+        EntryManager.putByKey("twitter-" + twitter_1.URL, twitter_1);
+        EntryManager.addByWord("twitter", twitter_2);
 
-        assertEquals(google_1, EntryManager.get("google-https://www.google.com"));
-        assertEquals(google_2, EntryManager.get("google-https://abc.xyz"));
-        assertEquals(alphabet, EntryManager.get("alphabet-https://abc.xyz"));
-        assertEquals(facebook, EntryManager.get("facebook-https://www.facebook.com"));
-        assertEquals(twitter_2, EntryManager.get("twitter-https://www.twitter.com"));
+        assertEquals(google_1, EntryManager.getByKey("google-https://www.google.com"));
+        assertEquals(google_2, EntryManager.getByKey("google-https://abc.xyz"));
+        assertEquals(alphabet, EntryManager.getByKey("alphabet-https://abc.xyz"));
+        assertEquals(facebook, EntryManager.getByKey("facebook-https://www.facebook.com"));
+        assertEquals(twitter_2, EntryManager.getByKey("twitter-https://www.twitter.com"));
 
         List<String> keys = EntryManager.getKeys("");
 
@@ -41,47 +41,47 @@ public class TestEntryManager {
         assertTrue(keys.contains("facebook-https://www.facebook.com"));
         assertTrue(keys.contains("twitter-https://www.twitter.com"));
 
-        List<Entry> googleResult = EntryManager.getRange("google");
+        List<Entry> googleResult = EntryManager.getByWord("google");
         assertEquals(2, googleResult.size());
         assertTrue(googleResult.contains(google_1));
         assertTrue(googleResult.contains(google_2));
 
-        List<Entry> alphabetResult = EntryManager.getRange("alphabet");
+        List<Entry> alphabetResult = EntryManager.getByWord("alphabet");
         assertEquals(1, alphabetResult.size());
         assertTrue(alphabetResult.contains(alphabet));
 
-        List<Entry> facebookResult = EntryManager.getRange("facebook");
+        List<Entry> facebookResult = EntryManager.getByWord("facebook");
         assertEquals(1, facebookResult.size());
         assertTrue(facebookResult.contains(facebook));
 
-        List<Entry> twitterResult = EntryManager.getRange("twitter");
+        List<Entry> twitterResult = EntryManager.getByWord("twitter");
         assertEquals(1, twitterResult.size());
         assertTrue(twitterResult.contains(twitter_2));
 
-        assertEquals(1, EntryManager.getCount("https://www.google.com"));
-        assertEquals(2, EntryManager.getCount("https://abc.xyz"));
-        assertEquals(1, EntryManager.getCount("https://www.facebook.com"));
-        assertEquals(1, EntryManager.getCount("https://www.twitter.com"));
+        assertEquals(1, EntryManager.getURLCount("https://www.google.com"));
+        assertEquals(2, EntryManager.getURLCount("https://abc.xyz"));
+        assertEquals(1, EntryManager.getURLCount("https://www.facebook.com"));
+        assertEquals(1, EntryManager.getURLCount("https://www.twitter.com"));
 
-        EntryManager.remove("google-" + google_1.URL);
-        EntryManager.remove("google-" + google_2.URL);
-        EntryManager.remove("alphabet-" + alphabet.URL);
-        EntryManager.remove("facebook-" + facebook.URL);
-        EntryManager.remove("twitter-" + twitter_2.URL);
+        EntryManager.deleteByKey("google-" + google_1.URL);
+        EntryManager.deleteByKey("google-" + google_2.URL);
+        EntryManager.deleteByKey("alphabet-" + alphabet.URL);
+        EntryManager.deleteByKey("facebook-" + facebook.URL);
+        EntryManager.deleteByKey("twitter-" + twitter_2.URL);
 
-        googleResult = EntryManager.getRange("google");
-        alphabetResult = EntryManager.getRange("alphabet");
-        facebookResult = EntryManager.getRange("facebook");
-        twitterResult = EntryManager.getRange("twitter");
+        googleResult = EntryManager.getByWord("google");
+        alphabetResult = EntryManager.getByWord("alphabet");
+        facebookResult = EntryManager.getByWord("facebook");
+        twitterResult = EntryManager.getByWord("twitter");
 
         assertEquals(0, googleResult.size());
         assertEquals(0, alphabetResult.size());
         assertEquals(0, facebookResult.size());
         assertEquals(0, twitterResult.size());
 
-        assertEquals(0, EntryManager.getCount("https://www.google.com"));
-        assertEquals(0, EntryManager.getCount("https://abc.xyz"));
-        assertEquals(0, EntryManager.getCount("https://www.facebook.com"));
-        assertEquals(0, EntryManager.getCount("https://www.twitter.com"));
+        assertEquals(0, EntryManager.getURLCount("https://www.google.com"));
+        assertEquals(0, EntryManager.getURLCount("https://abc.xyz"));
+        assertEquals(0, EntryManager.getURLCount("https://www.facebook.com"));
+        assertEquals(0, EntryManager.getURLCount("https://www.twitter.com"));
     }
 }
