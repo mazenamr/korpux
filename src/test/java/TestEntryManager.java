@@ -23,7 +23,7 @@ public class TestEntryManager {
         EntryManager.add("google-" + google_2.URL, google_2);
         EntryManager.add("alphabet-" + alphabet.URL, alphabet);
         EntryManager.add("facebook-" + facebook.URL, facebook);
-        EntryManager.add("twitter-" + twitter_2.URL, twitter_2);
+        EntryManager.add("twitter-" + twitter_1.URL, twitter_1);
         EntryManager.add("twitter-" + twitter_2.URL, twitter_2);
 
         assertEquals(google_1, EntryManager.get("google-https://www.google.com"));
