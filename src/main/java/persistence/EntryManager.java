@@ -18,7 +18,7 @@ public class EntryManager {
     private static final RocksDBManager entryDBManager = new RocksDBManager(ENTRY_DB_NAME);
     private static final RocksDBManager countDBManager = new RocksDBManager(COUNT_DB_NAME);
 
-    public void add(final String key, final Entry value) {
+    public static void add(final String key, final Entry value) {
         try {
             mutex.lock();
             ObjectOutputStream out = null;
@@ -44,7 +44,7 @@ public class EntryManager {
         }
     }
 
-    public Entry get(String key) {
+    public static Entry get(String key) {
         try {
             mutex.lock();
             ObjectInputStream in = null;
@@ -70,7 +70,7 @@ public class EntryManager {
         }
     }
 
-    public List<Entry> getRange(final String prefix) {
+    public static List<Entry> getRange(final String prefix) {
         try {
             mutex.lock();
             ObjectInputStream in = null;
@@ -97,7 +97,7 @@ public class EntryManager {
         }
     }
 
-    public int getCount(String url) {
+    public static int getCount(String url) {
         try {
             mutex.lock();
             return byteToInt(countDBManager.get(url.getBytes()));
@@ -106,7 +106,7 @@ public class EntryManager {
         }
     }
 
-    public void resetCount(String url) {
+    public static void resetCount(String url) {
         try {
             mutex.lock();
             countDBManager.put(url.getBytes(), intToByte(0));
@@ -115,7 +115,7 @@ public class EntryManager {
         }
     }
 
-    private byte[] intToByte(int value) {
+    private static byte[] intToByte(int value) {
         return new byte[] {
                 (byte) ((value >> 24) & 0xff),
                 (byte) ((value >> 16) & 0xff),
@@ -124,7 +124,7 @@ public class EntryManager {
         };
     }
 
-    private int byteToInt(byte[] value) {
+    private static int byteToInt(byte[] value) {
         if (value == null || value.length != 4) {
             return 0x0;
         }
