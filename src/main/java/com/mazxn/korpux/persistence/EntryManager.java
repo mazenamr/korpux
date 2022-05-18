@@ -1,4 +1,4 @@
-package com.mazxn.korpux.Persistence;
+package com.mazxn.korpux.persistence;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
