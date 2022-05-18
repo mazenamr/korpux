@@ -1,4 +1,4 @@
-package persistence;
+package com.mazxn.korpux.Persistence;
 
 public record Entry(
         String URL,

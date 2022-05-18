@@ -1,4 +1,4 @@
-package persistence;
+package com.mazxn.korpux.Persistence;
 
 import java.io.File;
 import java.io.IOException;
