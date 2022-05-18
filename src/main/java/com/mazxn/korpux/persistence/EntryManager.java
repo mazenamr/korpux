@@ -23,18 +23,23 @@ public class EntryManager {
             mutex.lock();
             ObjectOutputStream out = null;
             try {
+                Boolean found = get(key) != null;
                 ByteArrayOutputStream b = new ByteArrayOutputStream();
                 out = new ObjectOutputStream(b);
                 out.writeObject(value);
                 entryDBManager.put(key.getBytes(), b.toByteArray());
-                String url = value.URL();
-                int count = byteToInt(countDBManager.get(url.getBytes()));
-                countDBManager.put(url.getBytes(), intToByte(count + 1));
+                if (!found) {
+                    String url = value.URL;
+                    int count = byteToInt(countDBManager.get(url.getBytes()));
+                    countDBManager.put(url.getBytes(), intToByte(count + 1));
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 try {
-                    out.close();
+                    if (out != null) {
+                        out.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -44,7 +49,7 @@ public class EntryManager {
         }
     }
 
-    public static Entry get(String key) {
+    public static Entry get(final String key) {
         try {
             mutex.lock();
             ObjectInputStream in = null;
@@ -59,7 +64,9 @@ public class EntryManager {
                 e.printStackTrace();
             } finally {
                 try {
-                    in.close();
+                    if (in != null) {
+                        in.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -86,7 +93,9 @@ public class EntryManager {
                 e.printStackTrace();
             } finally {
                 try {
-                    in.close();
+                    if (in != null) {
+                        in.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -97,7 +106,40 @@ public class EntryManager {
         }
     }
 
-    public static int getCount(String url) {
+    public static List<String> getKeys(final String prefix) {
+        try {
+            mutex.lock();
+            List<byte[]> values = entryDBManager.getKeys(prefix.getBytes());
+            List<String> keys = new ArrayList<>();
+            for (byte[] value : values) {
+                keys.add(new String(value));
+            }
+            return keys;
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public static void remove(final String key) {
+        try {
+            mutex.lock();
+            Entry e = get(key);
+            if (e != null) {
+                String url = e.URL;
+                int count = byteToInt(countDBManager.get(url.getBytes()));
+                if (count > 1) {
+                    countDBManager.put(url.getBytes(), intToByte(count - 1));
+                } else {
+                    countDBManager.delete(url.getBytes());
+                }
+                entryDBManager.delete(key.getBytes());
+            }
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public static int getCount(final String url) {
         try {
             mutex.lock();
             return byteToInt(countDBManager.get(url.getBytes()));
@@ -106,7 +148,7 @@ public class EntryManager {
         }
     }
 
-    public static void resetCount(String url) {
+    public static void resetCount(final String url) {
         try {
             mutex.lock();
             countDBManager.put(url.getBytes(), intToByte(0));

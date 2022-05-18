@@ -29,7 +29,6 @@ public class RocksDBManager {
 
         try {
             Files.createDirectories(dir.getParentFile().toPath());
-            Files.createDirectories(dir.getAbsoluteFile().toPath());
             db = RocksDB.open(options, dir.getAbsolutePath());
         } catch (IOException | RocksDBException e) {
             e.printStackTrace();
@@ -58,12 +57,38 @@ public class RocksDBManager {
         it.seek(prefix);
         List<byte[]> result = new ArrayList<>();
         for (it.seek(prefix); it.isValid(); it.next()) {
+            Boolean isPrefix = true;
             byte[] key = it.key();
             for (int i = 0; i < prefix.length; i++) {
                 if (key[i] != prefix[i]) {
-                    break;
+                    isPrefix = false;
                 }
+            }
+            if (isPrefix) {
                 result.add(it.value());
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
+
+    public List<byte[]> getKeys(final byte[] prefix) {
+        RocksIterator it = db.newIterator();
+        it.seek(prefix);
+        List<byte[]> result = new ArrayList<>();
+        for (it.seek(prefix); it.isValid(); it.next()) {
+            Boolean isPrefix = true;
+            byte[] key = it.key();
+            for (int i = 0; i < prefix.length; i++) {
+                if (key[i] != prefix[i]) {
+                    isPrefix = false;
+                }
+            }
+            if (isPrefix) {
+                result.add(key);
+            } else {
+                break;
             }
         }
         return result;
