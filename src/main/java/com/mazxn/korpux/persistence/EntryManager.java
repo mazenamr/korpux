@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.mazxn.korpux.Constants;
+
 public class EntryManager {
     private static final ReentrantLock mutex = new ReentrantLock();
 
-    private static final String ENTRY_DB_NAME = "entry-db";
-    private static final String COUNT_DB_NAME = "count-db";
-
-    private static final RocksDBManager entryDBManager = new RocksDBManager(ENTRY_DB_NAME);
-    private static final RocksDBManager countDBManager = new RocksDBManager(COUNT_DB_NAME);
+    private static final RocksDBManager entryDBManager = new RocksDBManager(Constants.ENTRY_DB_NAME);
+    private static final RocksDBManager countDBManager = new RocksDBManager(Constants.COUNT_DB_NAME);
 
     public static void add(final String key, final Entry value) {
         try {

@@ -6,13 +6,14 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mazxn.korpux.Constants;
+
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
 
 public class RocksDBManager {
-    private static final String DB_PATH = "./data/";
 
     private String name = "korpux-db";
     private RocksDB db;
@@ -25,7 +26,7 @@ public class RocksDBManager {
         name = dbName;
         final Options options = new Options();
         options.setCreateIfMissing(true);
-        File dir = new File(DB_PATH, name);
+        File dir = new File(Constants.DB_PATH, name);
 
         try {
             Files.createDirectories(dir.getParentFile().toPath());
