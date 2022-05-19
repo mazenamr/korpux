@@ -1,6 +1,6 @@
 package com.mazxn.korpux.indexer;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -27,8 +27,14 @@ public class Parser {
             if (e.tagName().equals("meta")) {
                 continue;
             }
-            List<String> ownText = Arrays.asList(e.ownText().split(" "));
-            ownText = Cleanup.wordCleanup(ownText);
+            List<String> ownText = new ArrayList<>();
+            for (String w : e.ownText().split(" ")) {
+                if (w.length() > 1) {
+                    ownText.add(w);
+                }
+            }
+
+            ownText = new Cleanup().wordCleanup(ownText);
 
             for (String word : ownText) {
                 if (!items.containsKey(word)) {
@@ -37,8 +43,14 @@ public class Parser {
                 items.get(word).TotalCount += 1;
             }
 
-            List<String> allText = Arrays.asList(e.text().split(" "));
-            allText = Cleanup.wordCleanup(allText);
+            List<String> allText = new ArrayList<>();
+            for (String w : e.ownText().split(" ")) {
+                if (w.length() > 1) {
+                    allText.add(w);
+                }
+            }
+            allText = new Cleanup().wordCleanup(allText);
+
             for (String word : allText) {
                 if (!items.containsKey(word)) {
                     items.put(word, new Entry(url));

@@ -18,14 +18,6 @@ public class Indexer {
                     try {
                         Thread.sleep(200);
                         System.out.println("KORPUX INDEXER SHUTTING DOWN");
-                        if (args.length > 1) {
-                            if (args[1].toLowerCase().equals("printkeys")) {
-                                System.out.println("Printing keys");
-                            }
-                            else {
-                                System.out.println(args[1]);
-                            }
-                        }
                         try {
                             socket.close();
                         } catch (Exception e) {
@@ -43,7 +35,6 @@ public class Indexer {
             while (true) {
                 Socket client = socket.accept();
                 new IndexerWorker(client).start();
-                System.out.print("RECEIVED REQUEST FROM: " + client.getInetAddress().getHostAddress());
             }
 
         } catch (IOException e) {
@@ -59,30 +50,29 @@ public class Indexer {
         }
 
         public void run() {
-            while (true) {
-                ObjectInputStream in = null;
+            ObjectInputStream in = null;
+            try {
+                in = new ObjectInputStream(socket.getInputStream());
+                @SuppressWarnings("unchecked")
+                Hashtable<String, String> docs = (Hashtable<String, String>) in.readObject();
+
+                System.out.println("RECEIVED " + docs.size() + " DOCUMENTS");
+
+                for (String key : docs.keySet()) {
+                    AsyncWriter.write(Parser.parse(docs.get(key), key));
+                    System.out.println("PARSED: " + key);
+                }
+
+            socket.close();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
                 try {
-                    in = new ObjectInputStream(socket.getInputStream());
-                    @SuppressWarnings("unchecked")
-                    Hashtable<String, String> docs = (Hashtable<String, String>) in.readObject();
-
-                    System.out.println("RECEIVED " + docs.size() + " DOCUMENTS");
-
-                    for (String key : docs.keySet()) {
-                        AsyncWriter.write(Parser.parse(docs.get(key), key));
-                        System.out.println("PARSED: " + key);
+                    if (in != null) {
+                        in.close();
                     }
-
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
-                    try {
-                        if (in != null) {
-                            in.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }

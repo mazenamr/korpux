@@ -18,24 +18,26 @@ public class Cleanup {
         public int minLength = 1;
         public int maxLength = 127;
         public HashSet<Character> splitOn = new HashSet<>(
-                List.of(' ', '\n', '\t', '-', '_', '/', '\\', '.', ',', ';', ':', '&', '@'));
+                List.of(' ', '\n', '\t', '-', '_', '/', '.', ',', ';', ':', '&', '@'));
     }
 
-    public static List<String> wordCleanup(List<String> words, WordCleanupOptions options) {
+    public List<String> wordCleanup(List<String> words, WordCleanupOptions options) {
         List<String> result = new ArrayList<>();
         PorterStemmer stemmer = new PorterStemmer();
 
         if (options.splitOn != null && options.splitOn.size() > 0) {
+            List<String> splitWords = new ArrayList<>();
             for (String word : words) {
                 for (Character c : options.splitOn) {
                     String[] split = word.split(c.toString());
                     for (String s : split) {
                         if (s.length() >= options.minLength && s.length() <= options.maxLength) {
-                            words.add(s);
+                            splitWords.add(s);
                         }
                     }
                 }
             }
+            words.addAll(splitWords);
         }
 
         for (String word : words) {
@@ -46,7 +48,7 @@ public class Cleanup {
                 word = word.trim();
             }
             if (options.removeSymbols) {
-                word = word.replaceAll("[^a-zA-Z0-9]", "");
+                // word = word.replaceAll("[^a-zA-Z0-9]", "");
             }
             if (options.stemming) {
                 word = stemmer.stem(word);
@@ -66,7 +68,7 @@ public class Cleanup {
         return result;
     }
 
-    public static List<String> wordCleanup(List<String> words) {
+    public List<String> wordCleanup(List<String> words) {
         return wordCleanup(words, new WordCleanupOptions());
     }
 }
