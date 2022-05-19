@@ -52,11 +52,11 @@ public class TestAsyncWriter {
         assertEquals(facebook, EntryManager.getByWord("facebook").get(0));
         assertEquals(twitter_2, EntryManager.getByWord("twitter").get(0));
 
-        EntryManager.deleteByKey("google-" + google_1.URL);
-        EntryManager.deleteByKey("google-" + google_2.URL);
-        EntryManager.deleteByKey("alphabet-" + alphabet.URL);
-        EntryManager.deleteByKey("facebook-" + facebook.URL);
-        EntryManager.deleteByKey("twitter-" + twitter_2.URL);
+        EntryManager.delete("google-" + google_1.URL);
+        EntryManager.delete("google-" + google_2.URL);
+        EntryManager.delete("alphabet-" + alphabet.URL);
+        EntryManager.delete("facebook-" + facebook.URL);
+        EntryManager.delete("twitter-" + twitter_2.URL);
 
         assertEquals(0, EntryManager.getByWord("google").size());
         assertEquals(0, EntryManager.getByWord("alphabet").size());

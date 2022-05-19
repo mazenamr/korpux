@@ -1,5 +1,7 @@
 package com.mazxn.korpux.persistence;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.mazxn.korpux.Constants;
@@ -31,10 +33,24 @@ public class DocumentManager {
         }
     }
 
-    public static void put(final String key, final byte[] value) {
+    public static void delete(final String key) {
         try {
             mutex.lock();
-            entryDBManager.put(key.getBytes(), value);
+            entryDBManager.delete(key.getBytes());
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public static List<String> getKeys(final String prefix) {
+        try {
+            mutex.lock();
+            List<byte[]> values = entryDBManager.getKeys(prefix.getBytes());
+            List<String> keys = new ArrayList<>();
+            for (byte[] value : values) {
+                keys.add(new String(value));
+            }
+            return keys;
         } finally {
             mutex.unlock();
         }

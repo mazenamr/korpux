@@ -19,18 +19,18 @@ public class TestEntryManager {
         Entry twitter_1 = new Entry("https://www.twitter.com", 0, 0, 0, 0, 0, 0, 0, 0);
         Entry twitter_2 = new Entry("https://www.twitter.com", 1, 1, 1, 1, 1, 1, 1, 1);
 
-        EntryManager.putByKey("google-" + google_1.URL, google_1);
+        EntryManager.put("google-" + google_1.URL, google_1);
         EntryManager.putByWord("google", google_2);
-        EntryManager.putByKey("alphabet-" + alphabet.URL, alphabet);
+        EntryManager.put("alphabet-" + alphabet.URL, alphabet);
         EntryManager.putByWord("facebook", facebook);
-        EntryManager.putByKey("twitter-" + twitter_1.URL, twitter_1);
+        EntryManager.put("twitter-" + twitter_1.URL, twitter_1);
         EntryManager.putByWord("twitter", twitter_2);
 
-        assertEquals(google_1, EntryManager.getByKey("google-https://www.google.com"));
-        assertEquals(google_2, EntryManager.getByKey("google-https://abc.xyz"));
-        assertEquals(alphabet, EntryManager.getByKey("alphabet-https://abc.xyz"));
-        assertEquals(facebook, EntryManager.getByKey("facebook-https://www.facebook.com"));
-        assertEquals(twitter_2, EntryManager.getByKey("twitter-https://www.twitter.com"));
+        assertEquals(google_1, EntryManager.get("google-https://www.google.com"));
+        assertEquals(google_2, EntryManager.get("google-https://abc.xyz"));
+        assertEquals(alphabet, EntryManager.get("alphabet-https://abc.xyz"));
+        assertEquals(facebook, EntryManager.get("facebook-https://www.facebook.com"));
+        assertEquals(twitter_2, EntryManager.get("twitter-https://www.twitter.com"));
 
         List<String> keys = EntryManager.getKeys("");
 
@@ -58,11 +58,11 @@ public class TestEntryManager {
         assertEquals(1, twitterResult.size());
         assertTrue(twitterResult.contains(twitter_2));
 
-        EntryManager.deleteByKey("google-" + google_1.URL);
-        EntryManager.deleteByKey("google-" + google_2.URL);
-        EntryManager.deleteByKey("alphabet-" + alphabet.URL);
-        EntryManager.deleteByKey("facebook-" + facebook.URL);
-        EntryManager.deleteByKey("twitter-" + twitter_2.URL);
+        EntryManager.delete("google-" + google_1.URL);
+        EntryManager.delete("google-" + google_2.URL);
+        EntryManager.delete("alphabet-" + alphabet.URL);
+        EntryManager.delete("facebook-" + facebook.URL);
+        EntryManager.delete("twitter-" + twitter_2.URL);
 
         googleResult = EntryManager.getByWord("google");
         alphabetResult = EntryManager.getByWord("alphabet");

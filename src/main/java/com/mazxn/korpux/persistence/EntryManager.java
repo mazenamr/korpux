@@ -16,7 +16,7 @@ public class EntryManager {
 
     private static final RocksDBManager entryDBManager = new RocksDBManager(Constants.ENTRY_DB_NAME);
 
-    public static void putByKey(final String key, final Entry value) {
+    public static void put(final String key, final Entry value) {
         try {
             mutex.lock();
             ObjectOutputStream out = null;
@@ -41,7 +41,7 @@ public class EntryManager {
         }
     }
 
-    public static Entry getByKey(final String key) {
+    public static Entry get(final String key) {
         try {
             mutex.lock();
             ObjectInputStream in = null;
@@ -69,10 +69,10 @@ public class EntryManager {
         }
     }
 
-    public static void deleteByKey(final String key) {
+    public static void delete(final String key) {
         try {
             mutex.lock();
-            Entry e = getByKey(key);
+            Entry e = get(key);
             if (e != null) {
                 entryDBManager.delete(key.getBytes());
             }
@@ -84,7 +84,7 @@ public class EntryManager {
     public static void putByWord(final String word, final Entry entry) {
         try {
             mutex.lock();
-            putByKey(word + "-" + entry.URL, entry);
+            put(word + "-" + entry.URL, entry);
         } finally {
             mutex.unlock();
         }
