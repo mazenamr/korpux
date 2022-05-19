@@ -61,6 +61,7 @@ public class QueryEngine {
             this.socket = socket;
         }
 
+        @SuppressWarnings("unchecked")
         public void run() {
             try {
                 DataOutputStream dout = new DataOutputStream(socket.getOutputStream());

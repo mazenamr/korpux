@@ -51,11 +51,11 @@ public class Indexer {
             this.socket = socket;
         }
 
+        @SuppressWarnings("unchecked")
         public void run() {
             ObjectInputStream in = null;
             try {
                 in = new ObjectInputStream(socket.getInputStream());
-                @SuppressWarnings("unchecked")
                 Hashtable<String, String> docs = (Hashtable<String, String>) in.readObject();
 
                 System.out.println("RECEIVED " + docs.size() + " DOCUMENTS");
