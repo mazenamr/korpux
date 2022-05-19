@@ -1,4 +1,4 @@
-package com.mazxn.korpux.format;
+package com.mazxn.korpux.formatter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,7 +8,7 @@ import com.mazxn.korpux.Constants;
 
 import smile.nlp.stemmer.PorterStemmer;
 
-public class Format {
+public class Formatter {
     public static class WordFormatOptions {
         public boolean lowercase = true;
         public boolean trimWhitespace = true;
