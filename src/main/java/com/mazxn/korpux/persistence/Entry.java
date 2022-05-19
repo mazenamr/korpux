@@ -13,6 +13,18 @@ public class Entry implements Serializable {
     public Integer AsHeader5;
     public Integer AsHeader6;
 
+    public Entry(String URL) {
+        this.URL = URL;
+        this.TotalCount = 0;
+        this.AsTitle = 0;
+        this.AsHeader1 = 0;
+        this.AsHeader2 = 0;
+        this.AsHeader3 = 0;
+        this.AsHeader4 = 0;
+        this.AsHeader5 = 0;
+        this.AsHeader6 = 0;
+    }
+
     public Entry(String URL, Integer TotalCount, Integer AsTitle, Integer AsHeader1, Integer AsHeader2, Integer AsHeader3, Integer AsHeader4, Integer AsHeader5, Integer AsHeader6) {
         this.URL = URL;
         this.TotalCount = TotalCount;

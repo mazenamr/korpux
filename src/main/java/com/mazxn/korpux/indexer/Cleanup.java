@@ -1,6 +1,8 @@
 package com.mazxn.korpux.indexer;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import com.mazxn.korpux.Constants;
 
@@ -15,11 +17,12 @@ public class Cleanup {
         public boolean stopwords = true;
         public int minLength = 1;
         public int maxLength = 127;
-        public HashSet<Character> splitOn = new HashSet<>();
+        public HashSet<Character> splitOn = new HashSet<>(
+                List.of(' ', '\n', '\t', '-', '_', '/', '\\', '.', ',', ';', ':', '&', '@'));
     }
 
-    public static HashSet<String> wordCleanup(HashSet<String> words, WordCleanupOptions options) {
-        HashSet<String> result = new HashSet<>();
+    public static List<String> wordCleanup(List<String> words, WordCleanupOptions options) {
+        List<String> result = new ArrayList<>();
         PorterStemmer stemmer = new PorterStemmer();
 
         if (options.splitOn != null && options.splitOn.size() > 0) {
@@ -63,7 +66,7 @@ public class Cleanup {
         return result;
     }
 
-    public static HashSet<String> wordCleanup(HashSet<String> words) {
+    public static List<String> wordCleanup(List<String> words) {
         return wordCleanup(words, new WordCleanupOptions());
     }
 }

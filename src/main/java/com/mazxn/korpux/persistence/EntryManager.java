@@ -30,7 +30,7 @@ public class EntryManager {
                 if (!found) {
                     String url = value.URL;
                     int count = byteToInt(countDBManager.get(url.getBytes()));
-                    countDBManager.put(url.getBytes(), intToByte(count + 1));
+                    countDBManager.put(url.getBytes(), intToByte(count + value.TotalCount));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -83,8 +83,8 @@ public class EntryManager {
             if (e != null) {
                 String url = e.URL;
                 int count = byteToInt(countDBManager.get(url.getBytes()));
-                if (count > 1) {
-                    countDBManager.put(url.getBytes(), intToByte(count - 1));
+                if (count - e.TotalCount > 0) {
+                    countDBManager.put(url.getBytes(), intToByte(count - e.TotalCount));
                 } else {
                     countDBManager.delete(url.getBytes());
                 }
