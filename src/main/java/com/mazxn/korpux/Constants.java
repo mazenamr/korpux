@@ -12,6 +12,7 @@ public class Constants {
     public static final String COUNT_DB_NAME = "count-db";
 
     public static final int INDEXER_PORT = 4722;
+    public static final int QUERY_ENGINE_PORT = 4755;
 
     public static final HashSet<String> STOP_WORDS_NOT_STEMMED = new HashSet<>(List.of("a", "about", "above", "after",
             "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been",
