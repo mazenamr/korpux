@@ -5,11 +5,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner;
+import java.io.*;  
 
 import com.mazxn.korpux.Constants;
 import com.mazxn.korpux.formatter.Formatter;
+import com.mazxn.korpux.persistence.Entry;
+import com.mazxn.korpux.persistence.EntryManager;
 
 public class QueryEngine {
     public static void main(String[] args) {
@@ -53,21 +57,30 @@ public class QueryEngine {
 
         public void run() {
             try {
-                Scanner scanner = new Scanner(socket.getInputStream());
-                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+                DataOutputStream dout = new DataOutputStream(socket.getOutputStream());  
+                DataInputStream in = new DataInputStream(socket.getInputStream());
 
-                String query;
-                while ((query = scanner.nextLine()) != null) {
-                    List<String> words = new ArrayList<>();
-                    for (String w : query.split(" ")) {
-                        words.add(w);
-                    }
-                    words = new Formatter().formatWords(words);
+                
+                String query = (String)in.readUTF();
+                List<String> words = new ArrayList<>();
+                for (String w : query.split(" ")) {
+                    words.add(w);
                 }
+                words = new Formatter().formatWords(words);
+                
+                Hashtable<String, List<Entry>> entries = new Hashtable<>();
+                for (String word : words) {
+                    entries.put(word, EntryManager.getByWord(word));
+                }
+                List<String> result = Ranker.rank(entries);
 
-                scanner.close();
-                writer.close();
-                socket.close();
+                System.out.println("Client query: "+ query);
+                dout.writeUTF("Thank You For Connecting.");
+            
+                //dout.flush();
+                //dout.close();
+                //socket.close();
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
