@@ -1,10 +1,9 @@
-package com.mazxn.korpux.indexer;
+package com.mazxn.korpux.formatter;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.mazxn.korpux.formatter.Formatter;
 import com.mazxn.korpux.persistence.Entry;
 
 import org.jsoup.Jsoup;

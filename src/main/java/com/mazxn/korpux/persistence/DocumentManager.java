@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.mazxn.korpux.Constants;
+import com.mazxn.korpux.formatter.Parser;
 
 public class DocumentManager {
     private static final ReentrantLock mutex = new ReentrantLock();
@@ -51,6 +52,19 @@ public class DocumentManager {
                 keys.add(new String(value));
             }
             return keys;
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public static int countWords(final String key) {
+        try {
+            mutex.lock();
+            byte[] value = entryDBManager.get(key.getBytes());
+            if (value == null) {
+                return 0;
+            }
+            return Parser.parse(new String(value), key).size();
         } finally {
             mutex.unlock();
         }

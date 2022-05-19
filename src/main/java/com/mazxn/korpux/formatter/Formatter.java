@@ -48,7 +48,7 @@ public class Formatter {
                 word = word.trim();
             }
             if (options.removeSymbols) {
-                // word = word.replaceAll("[^a-zA-Z0-9]", "");
+                word = word.replaceAll("[^a-zA-Z0-9]", "");
             }
             if (options.stemming) {
                 word = stemmer.stem(word);
