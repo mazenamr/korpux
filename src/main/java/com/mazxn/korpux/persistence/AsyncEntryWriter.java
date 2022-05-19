@@ -3,7 +3,7 @@ package com.mazxn.korpux.persistence;
 import java.util.Hashtable;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class AsyncWriter implements Runnable {
+public class AsyncEntryWriter implements Runnable {
     private static final LinkedBlockingQueue<Hashtable<String, Entry>> queue = new LinkedBlockingQueue<>();
 
     @Override
@@ -26,7 +26,7 @@ public class AsyncWriter implements Runnable {
     }
 
     public static Thread write() {
-        AsyncWriter writer = new AsyncWriter();
+        AsyncEntryWriter writer = new AsyncEntryWriter();
         Thread t = new Thread(writer);
         t.start();
         return t;

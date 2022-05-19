@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.Hashtable;
 
 import com.mazxn.korpux.Constants;
-import com.mazxn.korpux.persistence.AsyncWriter;
+import com.mazxn.korpux.persistence.AsyncEntryWriter;
 
 public class Indexer {
     public static void main(String[] args) {
@@ -59,7 +59,7 @@ public class Indexer {
                 System.out.println("RECEIVED " + docs.size() + " DOCUMENTS");
 
                 for (String key : docs.keySet()) {
-                    AsyncWriter.write(Parser.parse(docs.get(key), key));
+                    AsyncEntryWriter.write(Parser.parse(docs.get(key), key));
                     System.out.println("PARSED: " + key);
                 }
 

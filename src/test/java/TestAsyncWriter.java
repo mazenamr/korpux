@@ -2,7 +2,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Hashtable;
 
-import com.mazxn.korpux.persistence.AsyncWriter;
+import com.mazxn.korpux.persistence.AsyncEntryWriter;
 import com.mazxn.korpux.persistence.Entry;
 import com.mazxn.korpux.persistence.EntryManager;
 
@@ -24,7 +24,7 @@ public class TestAsyncWriter {
         entries.put("alphabet", alphabet);
         entries.put("twitter", twitter_1);
 
-        Thread t1 = AsyncWriter.write(entries);
+        Thread t1 = AsyncEntryWriter.write(entries);
         try {
             t1.join();
         } catch (InterruptedException e) {
@@ -39,7 +39,7 @@ public class TestAsyncWriter {
         entries.put("facebook", facebook);
         entries.put("twitter", twitter_2);
 
-        Thread t2 = AsyncWriter.write(entries);
+        Thread t2 = AsyncEntryWriter.write(entries);
         try {
             t2.join();
         } catch (InterruptedException e) {
