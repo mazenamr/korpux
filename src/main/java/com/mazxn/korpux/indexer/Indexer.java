@@ -63,7 +63,7 @@ public class Indexer {
                     System.out.println("PARSED: " + key);
                 }
 
-            socket.close();
+                socket.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {

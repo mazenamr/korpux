@@ -1,4 +1,4 @@
-package com.mazxn.korpux.indexer;
+package com.mazxn.korpux.format;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,8 +8,8 @@ import com.mazxn.korpux.Constants;
 
 import smile.nlp.stemmer.PorterStemmer;
 
-public class Cleanup {
-    public static class WordCleanupOptions {
+public class Format {
+    public static class WordFormatOptions {
         public boolean lowercase = true;
         public boolean trimWhitespace = true;
         public boolean removeSymbols = true;
@@ -21,7 +21,7 @@ public class Cleanup {
                 List.of(' ', '\n', '\t', '-', '_', '/', '.', ',', ';', ':', '&', '@'));
     }
 
-    public List<String> wordCleanup(List<String> words, WordCleanupOptions options) {
+    public List<String> formatWords(List<String> words, WordFormatOptions options) {
         List<String> result = new ArrayList<>();
         PorterStemmer stemmer = new PorterStemmer();
 
@@ -68,7 +68,7 @@ public class Cleanup {
         return result;
     }
 
-    public List<String> wordCleanup(List<String> words) {
-        return wordCleanup(words, new WordCleanupOptions());
+    public List<String> formatWords(List<String> words) {
+        return formatWords(words, new WordFormatOptions());
     }
 }

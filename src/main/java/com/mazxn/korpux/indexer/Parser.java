@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import com.mazxn.korpux.format.Format;
 import com.mazxn.korpux.persistence.Entry;
 
 import org.jsoup.Jsoup;
@@ -34,7 +35,7 @@ public class Parser {
                 }
             }
 
-            ownText = new Cleanup().wordCleanup(ownText);
+            ownText = new Format().formatWords(ownText);
 
             for (String word : ownText) {
                 if (!items.containsKey(word)) {
@@ -49,7 +50,7 @@ public class Parser {
                     allText.add(w);
                 }
             }
-            allText = new Cleanup().wordCleanup(allText);
+            allText = new Format().formatWords(allText);
 
             for (String word : allText) {
                 if (!items.containsKey(word)) {
