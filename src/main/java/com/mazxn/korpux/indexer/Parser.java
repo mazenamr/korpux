@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Parser {
-    public Hashtable<String, Entry> parse(String html, String url) {
+    public static Hashtable<String, Entry> parse(String html, String url) {
         Hashtable<String, Entry> items = new Hashtable<>();
         Document document = Jsoup.parse(html.toLowerCase(), url);
         for (Element e : document.getAllElements()) {

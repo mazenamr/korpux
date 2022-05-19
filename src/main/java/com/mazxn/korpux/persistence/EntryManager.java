@@ -22,15 +22,16 @@ public class EntryManager {
             mutex.lock();
             ObjectOutputStream out = null;
             try {
-                Boolean found = getByKey(key) != null;
+                Entry e = getByKey(key);
+                int c = e == null ? 0 : e.TotalCount;
                 ByteArrayOutputStream b = new ByteArrayOutputStream();
                 out = new ObjectOutputStream(b);
                 out.writeObject(value);
                 entryDBManager.put(key.getBytes(), b.toByteArray());
-                if (!found) {
+                if (value.TotalCount != c) {
                     String url = value.URL;
                     int count = byteToInt(countDBManager.get(url.getBytes()));
-                    countDBManager.put(url.getBytes(), intToByte(count + value.TotalCount));
+                    countDBManager.put(url.getBytes(), intToByte(count + value.TotalCount - c));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -22,6 +22,10 @@ public class AsyncWriter implements Runnable {
 
     public static Thread write(Hashtable<String, Entry> items) {
         queue.add(items);
+        return write();
+    }
+
+    public static Thread write() {
         AsyncWriter writer = new AsyncWriter();
         Thread t = new Thread(writer);
         t.start();
