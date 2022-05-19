@@ -7,7 +7,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.mazxn.korpux.Constants;
 import com.mazxn.korpux.formatter.Parser;
 
-
 public class DocumentManager {
     private static final ReentrantLock mutex = new ReentrantLock();
 

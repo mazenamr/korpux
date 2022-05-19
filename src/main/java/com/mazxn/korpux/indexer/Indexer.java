@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.Hashtable;
 
 import com.mazxn.korpux.Constants;
+import com.mazxn.korpux.formatter.Parser;
 import com.mazxn.korpux.persistence.AsyncEntryWriter;
 import com.mazxn.korpux.persistence.DocumentManager;
 
