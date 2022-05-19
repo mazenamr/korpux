@@ -68,6 +68,7 @@ public class QueryEngine {
                 DataInputStream in = new DataInputStream(socket.getInputStream());
 
                 String query = (String) in.readUTF();
+                System.out.println(query);
                 List<String> words = new ArrayList<>();
                 for (String w : query.split(" ")) {
                     words.add(w);
@@ -79,21 +80,26 @@ public class QueryEngine {
                     entries.put(word, EntryManager.getByWord(word));
                 }
                 List<String> result = Ranker.rank(entries);
-                JSONArray resultJson = new JSONArray();
                 for (String r : result) {
-                    JSONObject obj = new JSONObject(); 
-                    obj.put("url", r);
+                    System.out.println(r);
+                }
+                JSONObject json = new JSONObject();
+                JSONArray jsonArray = new JSONArray();
+                for (String r : result) {
                     String html = DocumentManager.get(r);
                     Document document = Jsoup.parse(html.toLowerCase(), r);
-                    obj.put("title", document.title());
-                    resultJson.add(EntryManager.getByWord(r));
+                    JSONObject j = new JSONObject();
+                    j.put("title", document.title());
+                    j.put("url", r);
+                    jsonArray.add(j);
                 } 
-                System.out.println("RECIEVED QUERY: " + resultJson.toJSONString());
-                dout.writeUTF("Thank You For Connecting.");
+                json.put("result", jsonArray);
+                System.out.println("SENT JSON: " + json.toString());
+                dout.writeUTF(json.toString());
 
-                // dout.flush();
-                // dout.close();
-                // socket.close();
+                dout.flush();
+                dout.close();
+                socket.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

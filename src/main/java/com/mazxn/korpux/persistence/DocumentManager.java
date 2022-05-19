@@ -10,7 +10,7 @@ import com.mazxn.korpux.formatter.Parser;
 public class DocumentManager {
     private static final ReentrantLock mutex = new ReentrantLock();
 
-    private static final RocksDBManager entryDBManager = new RocksDBManager(Constants.ENTRY_DB_NAME);
+    private static final RocksDBManager entryDBManager = new RocksDBManager(Constants.DOCUMENT_DB_NAME);
 
     public static void put(final String key, final String value) {
         try {
