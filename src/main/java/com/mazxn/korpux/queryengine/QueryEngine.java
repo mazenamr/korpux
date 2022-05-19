@@ -5,11 +5,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner;
 
 import com.mazxn.korpux.Constants;
 import com.mazxn.korpux.formatter.Formatter;
+import com.mazxn.korpux.persistence.Entry;
+import com.mazxn.korpux.persistence.EntryManager;
+import com.mazxn.korpux.ranker.Ranker;
 
 public class QueryEngine {
     public static void main(String[] args) {
@@ -63,6 +67,12 @@ public class QueryEngine {
                         words.add(w);
                     }
                     words = new Formatter().formatWords(words);
+                    Hashtable<String, List<Entry>> entries = new Hashtable<>();
+                    for (String word : words) {
+                        entries.put(word, EntryManager.getByWord(word));
+                    }
+
+                    List<String> result = Ranker.rank(entries);
                 }
 
                 scanner.close();

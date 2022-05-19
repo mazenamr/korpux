@@ -8,6 +8,7 @@ import java.util.Hashtable;
 
 import com.mazxn.korpux.Constants;
 import com.mazxn.korpux.persistence.AsyncEntryWriter;
+import com.mazxn.korpux.persistence.DocumentManager;
 
 public class Indexer {
     public static void main(String[] args) {
@@ -59,6 +60,7 @@ public class Indexer {
                 System.out.println("RECEIVED " + docs.size() + " DOCUMENTS");
 
                 for (String key : docs.keySet()) {
+                    DocumentManager.put(key, docs.get(key));
                     AsyncEntryWriter.write(Parser.parse(docs.get(key), key));
                     System.out.println("PARSED: " + key);
                 }
