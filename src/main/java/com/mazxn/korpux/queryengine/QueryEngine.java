@@ -11,9 +11,15 @@ import java.util.List;
 
 import com.mazxn.korpux.Constants;
 import com.mazxn.korpux.formatter.Formatter;
+import com.mazxn.korpux.persistence.DocumentManager;
 import com.mazxn.korpux.persistence.Entry;
 import com.mazxn.korpux.persistence.EntryManager;
 import com.mazxn.korpux.ranker.Ranker;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 public class QueryEngine {
     public static void main(String[] args) {
@@ -72,8 +78,16 @@ public class QueryEngine {
                     entries.put(word, EntryManager.getByWord(word));
                 }
                 List<String> result = Ranker.rank(entries);
-
-                System.out.println("RECIEVED QUERY: " + query);
+                JSONArray resultJson = new JSONArray();
+                for (String r : result) {
+                    JSONObject obj = new JSONObject(); 
+                    obj.put("url", r);
+                    String html = DocumentManager.get(r);
+                    Document document = Jsoup.parse(html.toLowerCase(), r);
+                    obj.put("title", document.title());
+                    resultJson.add(EntryManager.getByWord(r));
+                } 
+                System.out.println("RECIEVED QUERY: " + resultJson.toJSONString());
                 dout.writeUTF("Thank You For Connecting.");
 
                 // dout.flush();
