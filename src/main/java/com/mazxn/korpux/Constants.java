@@ -9,7 +9,6 @@ public class Constants {
     public static final String DB_PATH = "./data/";
 
     public static final String ENTRY_DB_NAME = "entry-db";
-    public static final String COUNT_DB_NAME = "count-db";
 
     public static final int INDEXER_PORT = 4722;
     public static final int QUERY_ENGINE_PORT = 4755;

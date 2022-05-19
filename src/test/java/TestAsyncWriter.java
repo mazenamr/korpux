@@ -62,10 +62,5 @@ public class TestAsyncWriter {
         assertEquals(0, EntryManager.getByWord("alphabet").size());
         assertEquals(0, EntryManager.getByWord("facebook").size());
         assertEquals(0, EntryManager.getByWord("twitter").size());
-
-        assertEquals(0, EntryManager.getURLCount("https://www.google.com"));
-        assertEquals(0, EntryManager.getURLCount("https://abc.xyz"));
-        assertEquals(0, EntryManager.getURLCount("https://www.facebook.com"));
-        assertEquals(0, EntryManager.getURLCount("https://www.twitter.com"));
     }
 }

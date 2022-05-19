@@ -15,24 +15,16 @@ public class EntryManager {
     private static final ReentrantLock mutex = new ReentrantLock();
 
     private static final RocksDBManager entryDBManager = new RocksDBManager(Constants.ENTRY_DB_NAME);
-    private static final RocksDBManager countDBManager = new RocksDBManager(Constants.COUNT_DB_NAME);
 
     public static void putByKey(final String key, final Entry value) {
         try {
             mutex.lock();
             ObjectOutputStream out = null;
             try {
-                Entry e = getByKey(key);
-                int c = e == null ? 0 : e.TotalCount;
                 ByteArrayOutputStream b = new ByteArrayOutputStream();
                 out = new ObjectOutputStream(b);
                 out.writeObject(value);
                 entryDBManager.put(key.getBytes(), b.toByteArray());
-                if (value.TotalCount != c) {
-                    String url = value.URL;
-                    int count = byteToInt(countDBManager.get(url.getBytes()));
-                    countDBManager.put(url.getBytes(), intToByte(count + value.TotalCount - c));
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -82,13 +74,6 @@ public class EntryManager {
             mutex.lock();
             Entry e = getByKey(key);
             if (e != null) {
-                String url = e.URL;
-                int count = byteToInt(countDBManager.get(url.getBytes()));
-                if (count - e.TotalCount > 0) {
-                    countDBManager.put(url.getBytes(), intToByte(count - e.TotalCount));
-                } else {
-                    countDBManager.delete(url.getBytes());
-                }
                 entryDBManager.delete(key.getBytes());
             }
         } finally {
@@ -96,7 +81,7 @@ public class EntryManager {
         }
     }
 
-    public static void addByWord(final String word, final Entry entry) {
+    public static void putByWord(final String word, final Entry entry) {
         try {
             mutex.lock();
             putByKey(word + "-" + entry.URL, entry);
@@ -146,42 +131,5 @@ public class EntryManager {
         } finally {
             mutex.unlock();
         }
-    }
-
-    public static int getURLCount(final String url) {
-        try {
-            mutex.lock();
-            return byteToInt(countDBManager.get(url.getBytes()));
-        } finally {
-            mutex.unlock();
-        }
-    }
-
-    public static void resetURLCount(final String url) {
-        try {
-            mutex.lock();
-            countDBManager.put(url.getBytes(), intToByte(0));
-        } finally {
-            mutex.unlock();
-        }
-    }
-
-    private static byte[] intToByte(int value) {
-        return new byte[] {
-                (byte) ((value >> 24) & 0xff),
-                (byte) ((value >> 16) & 0xff),
-                (byte) ((value >> 8) & 0xff),
-                (byte) ((value >> 0) & 0xff),
-        };
-    }
-
-    private static int byteToInt(byte[] value) {
-        if (value == null || value.length != 4) {
-            return 0x0;
-        }
-        return (int) ((0xff & value[0]) << 24 |
-                (0xff & value[1]) << 16 |
-                (0xff & value[2]) << 8 |
-                (0xff & value[3]) << 0);
     }
 }

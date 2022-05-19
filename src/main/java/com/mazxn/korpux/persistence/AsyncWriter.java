@@ -12,7 +12,7 @@ public class AsyncWriter implements Runnable {
             while (!queue.isEmpty()) {
                 Hashtable<String, Entry> item = queue.take();
                 for (String key : item.keySet()) {
-                    EntryManager.addByWord(key, item.get(key));
+                    EntryManager.putByWord(key, item.get(key));
                 }
             }
         } catch (InterruptedException e) {
